@@ -1,0 +1,210 @@
+/* ==========================================================================
+   CSS STYLESHEET - MODERN MINIMALIST CALCULATOR
+   ========================================================================== */
+
+/* 1. CSS Custom Properties (Theme Variables)
+   Allows easy adjustments to the color scheme and sizing in one place. */
+:root {
+  --bg-app: #0f172a;               /* Deep navy-slate background */
+  --bg-calculator: #181b26;        /* Calculator body background */
+  --display-text-primary: #ffffff;  /* Bright white for the main number */
+  --display-text-secondary: #94a3b8;/* Muted grey for operation history */
+
+  /* Button Color Palette */
+  --btn-num-bg: #262c3d;           /* Slate for numeric buttons */
+  --btn-num-hover: #333b52;
+  --btn-num-text: #f8fafc;
+
+  --btn-action-bg: #3e475e;        /* Lighter grey for AC, +/-, % */
+  --btn-action-hover: #4b5570;
+  --btn-action-text: #e2e8f0;
+
+  --btn-operator-bg: #ff9f0a;      /* iOS style vivid orange for operators */
+  --btn-operator-hover: #ffb13b;
+  --btn-operator-active: #e08b08;
+  --btn-operator-text: #ffffff;
+
+  --shadow-color: rgba(0, 0, 0, 0.45);
+}
+
+/* 2. Global Resets & Body Centering */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none; /* Prevents text highlighting while tapping buttons quickly */
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at 50% 20%, #1e293b 0%, var(--bg-app) 100%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 1.5rem;
+}
+
+/* 3. Main Calculator Wrapper */
+.calculator-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.calculator {
+  width: 100%;
+  max-width: 360px;
+  background-color: var(--bg-calculator);
+  border-radius: 36px;
+  padding: 1.75rem 1.5rem 1.75rem;
+  box-shadow: 0 25px 60px -15px var(--shadow-color),
+              inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 4. Display Screen Area */
+.display {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  min-height: 130px;
+  padding: 0.5rem 0.75rem 1.25rem;
+  word-break: break-all;
+  overflow: hidden;
+}
+
+.previous-operand {
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--display-text-secondary);
+  min-height: 1.6rem;
+  letter-spacing: 0.03em;
+  transition: all 0.15s ease;
+}
+
+.current-operand {
+  font-size: clamp(2.4rem, 8vw, 3.5rem);
+  font-weight: 300;
+  color: var(--display-text-primary);
+  line-height: 1.1;
+  text-align: right;
+  letter-spacing: -0.02em;
+  max-width: 100%;
+}
+
+/* 5. Buttons Layout using CSS Grid */
+.buttons-grid {
+  display: grid;
+  /* 4 equal-width columns for our buttons */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* 6. Base Button Style */
+.btn {
+  appearance: none;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 1.45rem;
+  font-weight: 500;
+  height: 68px;
+  border-radius: 9999px; /* Pill / Circle shape */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.15s ease, transform 0.08s ease, filter 0.15s ease;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Accessible focus ring for keyboard navigation */
+.btn:focus-visible {
+  outline: 3px solid rgba(255, 159, 10, 0.6);
+  outline-offset: 2px;
+}
+
+/* Active bounce feedback on press/click */
+.btn:active {
+  transform: scale(0.93);
+}
+
+/* 7. Button Variants by Role */
+
+/* Number Buttons (0-9, .) */
+.btn-number {
+  background-color: var(--btn-num-bg);
+  color: var(--btn-num-text);
+}
+
+.btn-number:hover {
+  background-color: var(--btn-num-hover);
+}
+
+/* Utility Action Buttons (AC, +/-, %) */
+.btn-action {
+  background-color: var(--btn-action-bg);
+  color: var(--btn-action-text);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.btn-action:hover {
+  background-color: var(--btn-action-hover);
+}
+
+/* Math Operators (+, -, ×, ÷, =) */
+.btn-operator {
+  background-color: var(--btn-operator-bg);
+  color: var(--btn-operator-text);
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+.btn-operator:hover {
+  background-color: var(--btn-operator-hover);
+}
+
+.btn-operator:active {
+  background-color: var(--btn-operator-active);
+}
+
+/* Highlighted state when an operator is active/selected */
+.btn-operator.active-operator {
+  background-color: #ffffff;
+  color: var(--btn-operator-bg);
+}
+
+/* 8. Grid Spanning Special Case: Zero Button */
+/* iOS-style: "0" spans across two columns */
+.btn-zero {
+  grid-column: span 2;
+  justify-content: flex-start;
+  padding-left: 28px; /* Offset the 0 label slightly to the left like iOS */
+}
+
+/* 9. Small Screen Adjustments */
+@media (max-width: 400px) {
+  .calculator {
+    padding: 1.25rem 1rem;
+    border-radius: 28px;
+  }
+
+  .btn {
+    height: 60px;
+    font-size: 1.3rem;
+  }
+
+  .btn-zero {
+    padding-left: 24px;
+  }
+
+  .buttons-grid {
+    gap: 10px;
+  }
+}
+
